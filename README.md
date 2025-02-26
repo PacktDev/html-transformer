@@ -1,5 +1,8 @@
 # HTML Transformer
 
+[![JSR](https://jsr.io/badges/@packt/html-transformer)](https://jsr.io/badges/@packt/html-transformer)
+[![NPM]()]
+
 A flexible and powerful HTML transformation library that allows you to apply rules to HTML content using CSS selectors.
 
 ## Features

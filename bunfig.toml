@@ -1,0 +1,13 @@
+[test]
+coverage = true
+
+[install]
+registries = [
+    "https://registry.npmjs.org/",
+]
+
+[publish]
+access = "public"
+registries = [
+    "https://registry.npmjs.org/",
+]

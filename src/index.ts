@@ -19,9 +19,7 @@ export class Transformer {
   async transform(html: string): Promise<string>;
   async transform(html: Buffer): Promise<string>;
   async transform(html: Readable): Promise<string>;
-  async transform(
-    input: CheerioAPI | string | Buffer | Readable,
-  ): Promise<string> {
+  async transform(input: CheerioAPI | string | Buffer | Readable): Promise<string> {
     let $: CheerioAPI;
 
     if (input instanceof Buffer || ArrayBuffer.isView(input)) {
