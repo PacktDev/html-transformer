@@ -1,7 +1,8 @@
 # HTML Transformer
 
-[![JSR](https://jsr.io/badges/@packt/html-transformer)](https://jsr.io/badges/@packt/html-transformer)
-[![NPM]()]
+![NPM Version](https://img.shields.io/npm/v/%40packt%2Fhtml-transformer)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/PacktDev/html-transformer/build.yaml)
+
 
 A flexible and powerful HTML transformation library that allows you to apply rules to HTML content using CSS selectors.
 
