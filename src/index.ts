@@ -3,15 +3,15 @@ import type { Cheerio, CheerioAPI, CheerioOptions } from 'cheerio';
 import * as cheerio from 'cheerio';
 import type { AnyNode } from 'domhandler';
 
-export interface TranformationRule {
+export interface TransformationRule {
   selector: string[];
   rule: (node: Cheerio<AnyNode>, $: CheerioAPI) => Promise<void>;
 }
 
 export class Transformer {
-  private rules: TranformationRule[];
+  private rules: TransformationRule[];
 
-  constructor(rules: TranformationRule[]) {
+  constructor(rules: TransformationRule[]) {
     this.rules = rules;
   }
 

@@ -1,7 +1,7 @@
 import { Readable } from 'node:stream';
 import * as cheerio from 'cheerio';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { type TranformationRule, Transformer } from './index';
+import { type TransformationRule, Transformer } from './index';
 
 describe('Transformer', () => {
   afterEach(() => {
@@ -9,7 +9,7 @@ describe('Transformer', () => {
   });
 
   it('should transform string input', async () => {
-    const rule: TranformationRule = {
+    const rule: TransformationRule = {
       selector: ['h1'],
       rule: async (node, $) => {
         node.text('Modified Title');
@@ -23,7 +23,7 @@ describe('Transformer', () => {
   });
 
   it('should transform Buffer input', async () => {
-    const rule: TranformationRule = {
+    const rule: TransformationRule = {
       selector: ['p'],
       rule: async (node, $) => {
         node.addClass('modified');
@@ -38,7 +38,7 @@ describe('Transformer', () => {
   });
 
   it('should transform Readable stream input', async () => {
-    const rule: TranformationRule = {
+    const rule: TransformationRule = {
       selector: ['div'],
       rule: async (node, $) => {
         node.attr('data-modified', 'true');
@@ -53,7 +53,7 @@ describe('Transformer', () => {
   });
 
   it('should transform CheerioAPI input', async () => {
-    const rule: TranformationRule = {
+    const rule: TransformationRule = {
       selector: ['span'],
       rule: async (node, $) => {
         node.text('Modified span');
@@ -68,7 +68,7 @@ describe('Transformer', () => {
   });
 
   it('should apply multiple rules', async () => {
-    const rules: TranformationRule[] = [
+    const rules: TransformationRule[] = [
       {
         selector: ['h1'],
         rule: async (node, $) => {
@@ -93,7 +93,7 @@ describe('Transformer', () => {
   });
 
   it('should apply rules to multiple elements matching selector', async () => {
-    const rule: TranformationRule = {
+    const rule: TransformationRule = {
       selector: ['.item'],
       rule: async (node, $) => {
         node.addClass('processed');
@@ -110,7 +110,7 @@ describe('Transformer', () => {
   });
 
   it('should support multiple selectors in a rule', async () => {
-    const rule: TranformationRule = {
+    const rule: TransformationRule = {
       selector: ['h1', 'h2'],
       rule: async (node, $) => {
         node.addClass('heading');
@@ -128,7 +128,7 @@ describe('Transformer', () => {
   });
 
   it('should handle nested transformations', async () => {
-    const rules: TranformationRule[] = [
+    const rules: TransformationRule[] = [
       {
         selector: ['.container'],
         rule: async (node, $) => {
@@ -152,7 +152,7 @@ describe('Transformer', () => {
   });
 
   it('should apply asynchronous rules correctly', async () => {
-    const rule: TranformationRule = {
+    const rule: TransformationRule = {
       selector: ['div'],
       rule: async (node, $) => {
         // Simulate async operation
@@ -168,7 +168,7 @@ describe('Transformer', () => {
   });
 
   it('should handle complex selectors', async () => {
-    const rule: TranformationRule = {
+    const rule: TransformationRule = {
       selector: ['div > p.content'],
       rule: async (node, $) => {
         node.addClass('processed');
@@ -185,7 +185,7 @@ describe('Transformer', () => {
   });
 
   it('should transform empty HTML content', async () => {
-    const rule: TranformationRule = {
+    const rule: TransformationRule = {
       selector: ['body'],
       rule: async (node, $) => {
         node.append('<p>Added content</p>');
@@ -199,7 +199,7 @@ describe('Transformer', () => {
   });
 
   it('should allow rules to manipulate the DOM structure', async () => {
-    const rule: TranformationRule = {
+    const rule: TransformationRule = {
       selector: ['div'],
       rule: async (node, $) => {
         node.wrap('<section class="wrapper"></section>');
@@ -213,7 +213,7 @@ describe('Transformer', () => {
   });
 
   it('should support :has() pseudo-selector', async () => {
-    const rule: TranformationRule = {
+    const rule: TransformationRule = {
       selector: ['div:has(span)'],
       rule: async (node, $) => {
         node.addClass('contains-span');
@@ -230,7 +230,7 @@ describe('Transformer', () => {
   });
 
   it('should support :nth-child() pseudo-selector', async () => {
-    const rule: TranformationRule = {
+    const rule: TransformationRule = {
       selector: ['li:nth-child(2)'],
       rule: async (node, $) => {
         node.addClass('second');
@@ -246,7 +246,7 @@ describe('Transformer', () => {
   });
 
   it('should support :not() pseudo-selector', async () => {
-    const rule: TranformationRule = {
+    const rule: TransformationRule = {
       selector: ['p:not(.exclude)'],
       rule: async (node, $) => {
         node.addClass('included');
@@ -264,7 +264,7 @@ describe('Transformer', () => {
 
   // Update the test for unchanged content to handle HTML wrapping
   it('should return input with consistent wrapping when no selectors match', async () => {
-    const rule: TranformationRule = {
+    const rule: TransformationRule = {
       selector: ['non-existent-element'],
       rule: async (node, $) => {
         node.addClass('modified');
@@ -280,7 +280,7 @@ describe('Transformer', () => {
   });
 
   it('should transform elements in the head section', async () => {
-    const rule: TranformationRule = {
+    const rule: TransformationRule = {
       selector: ['title'],
       rule: async (node, $) => {
         node.text('Modified Page Title');
@@ -295,7 +295,7 @@ describe('Transformer', () => {
   });
 
   it('should transform meta tags in the head section', async () => {
-    const rule: TranformationRule = {
+    const rule: TransformationRule = {
       selector: ['meta[name="description"]'],
       rule: async (node, $) => {
         node.attr('content', 'Modified description');
@@ -311,7 +311,7 @@ describe('Transformer', () => {
   });
 
   it('should transform link tags in the head section', async () => {
-    const rule: TranformationRule = {
+    const rule: TransformationRule = {
       selector: ['link[rel="stylesheet"]'],
       rule: async (node, $) => {
         node.attr('href', 'modified.css');
@@ -327,7 +327,7 @@ describe('Transformer', () => {
   });
 
   it('should add new elements to the head section', async () => {
-    const rule: TranformationRule = {
+    const rule: TransformationRule = {
       selector: ['head'],
       rule: async (node, $) => {
         node.append('<meta name="robots" content="noindex">');
