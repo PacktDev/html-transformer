@@ -17,42 +17,46 @@ export class Transformer {
 
   async transform(
     $: CheerioAPI,
-    cheerioOptions: CheerioOptions,
-    isDocument: boolean,
+    cheerioOptions?: CheerioOptions,
+    isDocument?: boolean,
   ): Promise<string>;
   async transform(
     html: string,
-    cheerioOptions: CheerioOptions,
-    isDocument: boolean,
+    cheerioOptions?: CheerioOptions,
+    isDocument?: boolean,
   ): Promise<string>;
   async transform(
     html: Buffer,
-    cheerioOptions: CheerioOptions,
-    isDocument: boolean,
+    cheerioOptions?: CheerioOptions,
+    isDocument?: boolean,
   ): Promise<string>;
   async transform(
     html: Readable,
-    cheerioOptions: CheerioOptions,
-    isDocument: boolean,
+    cheerioOptions?: CheerioOptions,
+    isDocument?: boolean,
   ): Promise<string>;
   async transform(
     input: CheerioAPI | string | Buffer | Readable,
-    cheerioOptions: CheerioOptions = {},
-    isDocument = true,
+    cheerioOptions?: CheerioOptions,
+    isDocument?: boolean,
   ): Promise<string> {
     let $: CheerioAPI;
+    //biome-ignore lint/style/noParameterAssign: This is just to ensure the default value is set
+    cheerioOptions = cheerioOptions ?? {};
+    //biome-ignore lint/style/noParameterAssign: This is just to ensure the default value is set
+    isDocument = isDocument ?? true;
 
     if (input instanceof Buffer || ArrayBuffer.isView(input)) {
-      $ = cheerio.load(input.toString(), {}, isDocument);
+      $ = cheerio.load(input.toString(), cheerioOptions, isDocument);
     } else if (input instanceof Readable) {
       const chunks: Buffer[] = [];
       for await (const chunk of input) {
         chunks.push(Buffer.from(chunk));
       }
       const buffer = Buffer.concat(chunks);
-      $ = cheerio.load(buffer.toString(), {}, isDocument);
+      $ = cheerio.load(buffer.toString(), cheerioOptions, isDocument);
     } else if (typeof input === 'string') {
-      $ = cheerio.load(input, {}, isDocument);
+      $ = cheerio.load(input, cheerioOptions, isDocument);
     } else {
       $ = input;
     }
