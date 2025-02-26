@@ -34,7 +34,6 @@
   "author": "Packt Publishing",
   "license": "MIT",
   "publishConfig": {
-    "access": "public",
-    "registry": "https://npm.pkg.github.com"
+    "access": "public"
   }
 }
