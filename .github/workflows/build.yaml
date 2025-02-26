@@ -146,7 +146,7 @@ jobs:
         run: |
           echo "@packt:registry=https://npm.pkg.github.com" > .npmrc
           echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" >> .npmrc
-      
+
       - name: Publish to GitHub Packages
         run: bun publish --access=public
         env:
