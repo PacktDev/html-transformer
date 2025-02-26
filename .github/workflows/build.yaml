@@ -148,7 +148,7 @@ jobs:
       - name: Update package version and name
         run: |
           jq ".version = \"$VERSION\"" package.json > package.json.tmp
-          jq ".name = \"@${{ github.repository_owner }}/${{ github.repository }}\"" package.json.tmp > package.json
+          jq ".name = \"@${{ github.repository }}\"" package.json.tmp > package.json
       
       - name: Setup .npmrc for GitHub Packages
         run: |
