@@ -145,14 +145,14 @@ jobs:
         id: get_version
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
       
-      - name: Update package version
+      - name: Update package version and name
         run: |
           jq ".version = \"$VERSION\"" package.json > package.json.tmp
-          mv package.json.tmp package.json
+          jq ".name = \"@${{ github.repository_owner }}/${{ github.repository }}\"" package.json.tmp > package.json
       
       - name: Setup .npmrc for GitHub Packages
         run: |
-          echo "@packt:registry=https://npm.pkg.github.com" > .npmrc
+          echo "@${{ github.repository_owner }}:registry=https://npm.pkg.github.com" > .npmrc
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
 
       - name: Publish to GitHub Packages
