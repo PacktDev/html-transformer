@@ -3,8 +3,18 @@
   "description": "A HTML to HTML transformation library based on CSS selector rules and Cheerio",
   "module": "src/index.ts",
   "type": "module",
+  "scripts": {
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
   "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
     "@types/bun": "latest",
+    "@vitest/coverage-v8": "^3.0.7",
     "vitest": "^3.0.6"
   },
   "peerDependencies": {
