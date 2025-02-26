@@ -1,5 +1,5 @@
 import { Readable } from 'node:stream';
-import type { Cheerio, CheerioAPI } from 'cheerio';
+import type { Cheerio, CheerioAPI, CheerioOptions } from 'cheerio';
 import * as cheerio from 'cheerio';
 import type { AnyNode } from 'domhandler';
 
@@ -15,24 +15,44 @@ export class Transformer {
     this.rules = rules;
   }
 
-  async transform($: CheerioAPI): Promise<string>;
-  async transform(html: string): Promise<string>;
-  async transform(html: Buffer): Promise<string>;
-  async transform(html: Readable): Promise<string>;
-  async transform(input: CheerioAPI | string | Buffer | Readable): Promise<string> {
+  async transform(
+    $: CheerioAPI,
+    cheerioOptions: CheerioOptions,
+    isDocument: boolean,
+  ): Promise<string>;
+  async transform(
+    html: string,
+    cheerioOptions: CheerioOptions,
+    isDocument: boolean,
+  ): Promise<string>;
+  async transform(
+    html: Buffer,
+    cheerioOptions: CheerioOptions,
+    isDocument: boolean,
+  ): Promise<string>;
+  async transform(
+    html: Readable,
+    cheerioOptions: CheerioOptions,
+    isDocument: boolean,
+  ): Promise<string>;
+  async transform(
+    input: CheerioAPI | string | Buffer | Readable,
+    cheerioOptions: CheerioOptions = {},
+    isDocument = true,
+  ): Promise<string> {
     let $: CheerioAPI;
 
     if (input instanceof Buffer || ArrayBuffer.isView(input)) {
-      $ = cheerio.load(input.toString());
+      $ = cheerio.load(input.toString(), {}, isDocument);
     } else if (input instanceof Readable) {
       const chunks: Buffer[] = [];
       for await (const chunk of input) {
         chunks.push(Buffer.from(chunk));
       }
       const buffer = Buffer.concat(chunks);
-      $ = cheerio.load(buffer.toString());
+      $ = cheerio.load(buffer.toString(), {}, isDocument);
     } else if (typeof input === 'string') {
-      $ = cheerio.load(input);
+      $ = cheerio.load(input, {}, isDocument);
     } else {
       $ = input;
     }
