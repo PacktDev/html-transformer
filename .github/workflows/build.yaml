@@ -142,9 +142,12 @@ jobs:
           jq ".version = \"$VERSION\"" package.json > package.json.tmp
           mv package.json.tmp package.json
       
-      - name: Publish to NPM
+      - name: Setup .npmrc for GitHub Packages
+        run: |
+          echo "@packt:registry=https://npm.pkg.github.com" > .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" >> .npmrc
+      
+      - name: Publish to GitHub Packages
         run: bun publish --access=public
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-    
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
