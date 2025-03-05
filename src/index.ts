@@ -9,42 +9,38 @@ export interface TransformationRule {
 }
 
 export class Transformer {
-  private rules: TransformationRule[];
+  private _rules: TransformationRule[];
 
   constructor(rules: TransformationRule[]) {
-    this.rules = rules;
+    this._rules = rules;
   }
 
   async transform(
     $: CheerioAPI,
-    cheerioOptions?: CheerioOptions,
+    cheerioOptions?: CheerioOptions | null,
     isDocument?: boolean,
   ): Promise<string>;
   async transform(
     html: string,
-    cheerioOptions?: CheerioOptions,
+    cheerioOptions?: CheerioOptions | null,
     isDocument?: boolean,
   ): Promise<string>;
   async transform(
     html: Buffer,
-    cheerioOptions?: CheerioOptions,
+    cheerioOptions?: CheerioOptions | null,
     isDocument?: boolean,
   ): Promise<string>;
   async transform(
     html: Readable,
-    cheerioOptions?: CheerioOptions,
+    cheerioOptions?: CheerioOptions | null,
     isDocument?: boolean,
   ): Promise<string>;
   async transform(
     input: CheerioAPI | string | Buffer | Readable,
-    cheerioOptions?: CheerioOptions,
+    cheerioOptions?: CheerioOptions | null,
     isDocument?: boolean,
   ): Promise<string> {
     let $: CheerioAPI;
-    //biome-ignore lint/style/noParameterAssign: This is just to ensure the default value is set
-    cheerioOptions = cheerioOptions ?? {};
-    //biome-ignore lint/style/noParameterAssign: This is just to ensure the default value is set
-    isDocument = isDocument ?? true;
 
     if (input instanceof Buffer || ArrayBuffer.isView(input)) {
       $ = cheerio.load(input.toString(), cheerioOptions, isDocument);
@@ -77,5 +73,27 @@ export class Transformer {
     ).then((_) => {
       return $.html();
     });
+  }
+
+  public addRule(rule: TransformationRule): void;
+  public addRule(rules: TransformationRule[]): void;
+  public addRule(rule: TransformationRule | TransformationRule[]): void {
+    if (Array.isArray(rule)) {
+      this._rules.push(...rule);
+    } else {
+      this._rules.push(rule);
+    }
+  }
+
+  public removeRule(selector: string): void {
+    this._rules = this._rules.filter((rule) => !rule.selector.includes(selector));
+  }
+
+  public clearRules(): void {
+    this._rules = [];
+  }
+
+  get rules(): TransformationRule[] {
+    return this._rules;
   }
 }
