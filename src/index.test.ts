@@ -342,4 +342,116 @@ describe('Transformer', () => {
       /<head><title>Test<\/title><meta name="robots" content="noindex"><\/head>/,
     );
   });
+
+  it('should add a single rule', () => {
+    const transformer = new Transformer([]);
+    const rule: TransformationRule = {
+      selector: ['h1'],
+      rule: async (node, $) => {
+        node.text('Modified');
+      },
+    };
+
+    transformer.addRule(rule);
+    expect(transformer.rules).toHaveLength(1);
+    expect(transformer.rules[0]).toBe(rule);
+  });
+
+  it('should add multiple rules at once', () => {
+    const transformer = new Transformer([]);
+    const rules: TransformationRule[] = [
+      {
+        selector: ['h1'],
+        rule: async (node, $) => {
+          node.text('Modified h1');
+        },
+      },
+      {
+        selector: ['h2'],
+        rule: async (node, $) => {
+          node.text('Modified h2');
+        },
+      },
+    ];
+
+    transformer.addRule(rules);
+    expect(transformer.rules).toHaveLength(2);
+    expect(transformer.rules).toEqual(rules);
+  });
+
+  it('should remove rules by selector', () => {
+    const rules: TransformationRule[] = [
+      {
+        selector: ['h1', 'h2'],
+        rule: async (node, $) => {
+          node.addClass('heading');
+        },
+      },
+      {
+        selector: ['p', 'span'],
+        rule: async (node, $) => {
+          node.addClass('text');
+        },
+      },
+    ];
+
+    const transformer = new Transformer(rules);
+    transformer.removeRule('h1');
+
+    expect(transformer.rules).toHaveLength(1);
+    expect(transformer.rules[0].selector).toEqual(['p', 'span']);
+  });
+
+  it('should clear all rules', () => {
+    const rules: TransformationRule[] = [
+      {
+        selector: ['h1'],
+        rule: async (node, $) => {
+          node.addClass('heading');
+        },
+      },
+      {
+        selector: ['p'],
+        rule: async (node, $) => {
+          node.addClass('text');
+        },
+      },
+    ];
+
+    const transformer = new Transformer(rules);
+    transformer.clearRules();
+
+    expect(transformer.rules).toHaveLength(0);
+  });
+
+  it('should pass cheerioOptions to cheerio.load', async () => {
+    const spy = vi.spyOn(cheerio, 'load');
+    const rule: TransformationRule = {
+      selector: ['h1'],
+      rule: async (node, $) => {
+        node.text('Modified');
+      },
+    };
+
+    const transformer = new Transformer([rule]);
+    const options = { decodeEntities: false };
+    await transformer.transform('<h1>Title</h1>', options);
+
+    expect(spy).toHaveBeenCalledWith('<h1>Title</h1>', options, undefined);
+  });
+
+  it('should respect isDocument parameter', async () => {
+    const spy = vi.spyOn(cheerio, 'load');
+    const rule: TransformationRule = {
+      selector: ['h1'],
+      rule: async (node, $) => {
+        node.text('Modified');
+      },
+    };
+
+    const transformer = new Transformer([rule]);
+    await transformer.transform('<h1>Title</h1>', null, false);
+
+    expect(spy).toHaveBeenCalledWith('<h1>Title</h1>', null, false);
+  });
 });

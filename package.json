@@ -1,6 +1,6 @@
 {
   "name": "@packt/html-transformer",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "A HTML to HTML transformation library based on CSS selector rules and Cheerio",
   "module": "src/index.ts",
   "type": "module",
